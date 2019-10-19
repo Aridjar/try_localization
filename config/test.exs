@@ -11,8 +11,8 @@ config :logger, level: :warn
 
 # Configure your database
 config :localization, Localization.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "localization_test",
-  hostname: "localhost",
+  username: System.get_env("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASSWORD"),
+  database: System.get_env("POSTGRES_DB_TEST"),
+  hostname: System.get_env("POSTGRES_HOST"),
   pool: Ecto.Adapters.SQL.Sandbox

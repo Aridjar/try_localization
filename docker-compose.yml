@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+    # the first container will be called postgres
+    postgres:
+        # install the official postgres image with postgis installed 
+        image: mdillon/postgis
+        # the volumes allow us to have a shared space between our computer and the docker vm
+        volumes:
+            - "./.data/postgres:/var/lib/postgresql"
+         # set up environment variable for the postgres instance
+        environment:
+            POSTGRES_USER: ${PSQL_USER}
+            POSTGRES_PASSWORD: ${PSQL_PWD}
+            POOL: 16
+        # the port to listen
+        ports:
+            - "5432:5432"
+    # our last container is called elixir
+    elixir:
+        # build use a path to a Dockerfile
+        build: .
+        # we set multiple ports as each of our application (but database) will use a different port
+        ports:
+            - "4000:4000"
+            - "4002:4002"
+        # we share the entire app with the container, but the libs
+        volumes:
+            - ".:/app"
+            - "/app/deps"
+            - "/app/apps/admin/assets/node_modules"
+        # the container will not start if the postgres container isn't running
+        depends_on:
+            - postgres
+        # set up environment variable for the phoenix instance 
+        environment:
+            POSTGRES_USER: ${PSQL_USER}
+            POSTGRES_PASSWORD: ${PSQL_PWD}
+            POSTGRES_DB_TEST: ${PSQL_DB_TEST}
+            POSTGRES_DB_DEV: ${PSQL_DB}
+            POSTGRES_HOST: ${PSQL_HOST}
