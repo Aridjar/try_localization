@@ -1,10 +1,12 @@
 defmodule Localization.ImportCsv do
+  alias Localization.JobOffers
+
   def do_script() do
     {job_offers, professions} = get_data()
-    simplify_professions = simplify_professions_data(professions)
-    stash = create_base_stash(simplify_professions)
+    simplified_professions = simplify_professions_data(professions)
+    stash = JobOffers.create_base_stash(simplified_professions)
 
-    sort_data_per_professions(job_offers, simplify_professions, stash)
+    JobOffers.sort_data_per_professions(job_offers, simplified_professions, stash)
   end
 
   def get_data() do
@@ -25,31 +27,5 @@ defmodule Localization.ImportCsv do
   def simplify_professions_data(professions) do
     professions
     |> Map.new(fn %{"id" => id, "category_name" => category_name} -> {id, category_name} end)
-  end
-
-  def create_base_stash(simplify_professions) do
-    simplify_professions
-    |> Map.values()
-    |> Enum.uniq()
-    |> Map.new(fn name -> {name, 0} end)
-    |> Enum.into(%{"total" => 0, "undefined" => 0})
-  end
-
-  def sort_data_per_professions([], _, stash), do: stash
-
-  def sort_data_per_professions([%{"profession_id" => id} | tail], simplify_professions, stash) do
-    key =
-      with {:ok, val} <- Map.fetch(simplify_professions, id) do
-        val
-      else
-        _ -> "undefined"
-      end
-
-    new_stash =
-      stash
-      |> Map.update!(key, &(&1 + 1))
-      |> Map.update!("total", &(&1 + 1))
-
-    sort_data_per_professions(tail, simplify_professions, new_stash)
   end
 end

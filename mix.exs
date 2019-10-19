@@ -43,7 +43,9 @@ defmodule Localization.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:csv, "~> 2.3"}
+      {:csv, "~> 2.3"},
+      {:distance, "~> 0.2.1"},
+      {:topo, "~> 0.3.0"}
     ]
   end
 
