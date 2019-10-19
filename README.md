@@ -56,3 +56,13 @@ Europe: [Liste de points extrêmes de l'Europe](https://fr.wikipedia.org/wiki/Li
 Oceania [Liste de points extrêmes de l'Océanie](https://fr.wikipedia.org/wiki/Liste_de_points_extrêmes_de_l%27Océanie)
 America (south and north): [Liste de points extrêmes de l'Amérique](https://fr.wikipedia.org/wiki/Liste_de_points_extrêmes_de_l%27Amérique)
 
+# 02/03 : Questions : Scaling
+
+There is multiple methods for scaling. As the langage is already performant, it wouldn't be usefull to change it. (Go would have been another solution, and Java/C++ could potentially be acceptable).
+
+To scale, you could
+* Improve your postgresQL (which should have the module PostGIS to direclty ask for continent in the database) with better caching, better index and [optimization](https://gist.github.com/valyala/ae3cbfa4104f1a022a2af9b8656b1131)
+* Create SQL cluster. This may ask for a lot of money and DevOps knowledge.
+* Create a Redis with id in the format `category:continent` which should only store a number. This should be simple to implement, but it would only be usefull for the one thing it was design for, and literally nothing else.
+* Use `Agent` to store the data instead of Redis. It can only be done in a Elixir/Erlang project.
+* Store the database calls and `Copy` the new jobs each seconds. This would make the write take less time, but people may miss some data, as they aren't persisted in real time. (but, what is a seconds ?)
