@@ -18,17 +18,20 @@ defmodule Localization.JobOffersTest do
     "office_latitude" => "51.35",
     "office_longitude" => "51.35"
   }
+
+  @bad_job_offer %{
+    "profession_id" => nil,
+    "office_latitude" => "",
+    "office_longitude" => ""
+  }
+
   @job_offers [
     @job_offer,
     %{"profession_id" => "2", "office_latitude" => "51.35", "office_longitude" => "51.35"},
     %{"profession_id" => "3", "office_latitude" => "51.35", "office_longitude" => "51.35"},
-    %{"profession_id" => "1", "office_latitude" => "51.35", "office_longitude" => "51.35"}
+    %{"profession_id" => "1", "office_latitude" => "51.35", "office_longitude" => "51.35"},
+    @bad_job_offer
   ]
-  @invalid_job_offer %{
-    "profession_id" => nil,
-    "office_latitude" => "0",
-    "office_longitude" => "0"
-  }
 
   @result %{
     "category" => %{
@@ -58,8 +61,8 @@ defmodule Localization.JobOffersTest do
       asia: 0,
       europe: 0,
       oceania: 0,
-      total: 4,
-      undefined: 0
+      total: 5,
+      undefined: 1
     },
     :undefined => %{
       africa: 0,
@@ -68,8 +71,8 @@ defmodule Localization.JobOffersTest do
       asia: 0,
       europe: 0,
       oceania: 0,
-      total: 0,
-      undefined: 0
+      total: 1,
+      undefined: 1
     }
   }
 
@@ -86,12 +89,13 @@ defmodule Localization.JobOffersTest do
     assert JobOffers.get_profession_from_job_offer(@job_offer, @simplified_professions) ==
              "category"
 
-    assert JobOffers.get_profession_from_job_offer(@invalid_job_offer, @simplified_professions) ==
+    assert JobOffers.get_profession_from_job_offer(@bad_job_offer, @simplified_professions) ==
              :undefined
   end
 
   test "get continent from job offer" do
     assert JobOffers.get_continent_from_job_offer(@job_offer) == :america
+    assert JobOffers.get_continent_from_job_offer(@bad_job_offer) == :undefined
   end
 
   test "generate new stash" do

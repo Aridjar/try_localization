@@ -1,4 +1,26 @@
 defmodule Localization.JobOffers do
+  @moduledoc """
+    Job offer is a module where logic about job offers will be executed
+    It mains logic consist of a recusrive functio `sort_data_per_professions/3`
+    This function takes
+      * a job_offers list
+      * a `simplified_professions` map
+      * a stash map
+    and should return a stash map
+
+    To know more about the simplified_profession map, please refere to the `Localization.ImportCsv` documentation
+
+    You can use `create_base_stash` to create a stash map
+    `create_base_stash` only takes one argument, which is a `simplified_professions` map.
+
+    ## Stashs
+
+    Here, a stash is a two dimentionnal map.
+    The first dimensions is variable in size, has it depends of the number of professions in a `simplified_professions` map.
+    The second dimensions is a list of continent.
+    Both dimensions have a `:total` and an `:undefined` field.
+  """
+
   use Localization.GeographicalData
 
   def create_base_stash(simplified_professions) do

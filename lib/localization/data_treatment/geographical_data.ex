@@ -1,4 +1,8 @@
 defmodule Localization.GeographicalData do
+  @moduledoc """
+    GeographicalData is a simple module use to pass geographical data to any other module which may need it.
+  """
+
   defmacro __using__([]) do
     quote do
       @continents %{

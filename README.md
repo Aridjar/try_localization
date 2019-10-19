@@ -1,13 +1,18 @@
 # Localization
 
-The project is in Elixir
-Go would have probably be the best language to do this project, as it is fast (which is a requirement of the second part), easy to create API with (third part), and is 
-Unfortunatly, time is also a constraint. As I don't know go (nor it libs, just that it isn't really easy to use external depencies (even if it got better)), I didn't want spend too much time trying to figure out go instead of the actual problem
+The project is in Elixir.
 
-That's why Elixir was my choice: I know it, I can setup an IPA in a short time, find libs easely and the documentation is one of the best. It is great for the second and third part.
+Go would have probably be the best language to do this project, as it is fast (which is a requirement of the second part), easy to create API with (third part), and is an iterative language.</br>
+Unfortunatly, time is also a constraint. As I almost don't know Go (nor its libs, just that it isn't really easy to use external depencies (even if it got better)), I didn't want spend too much time trying to figure out Go instead of the actual problem.
+
+That's why Elixir was my choice: I know it, I can setup an API in a short time, find libs easely and the documentation is one of the best. It is great for the second and third part.
 Unfortunatly, the first part will be longer than with an OOP langage (at equal knowledge).
 
-To start your Phoenix server:
+Test should fully cover the code.</br>
+The documentation is made in the module level (not function level).
+
+
+# To start your Phoenix server:
 
 ## Without docker
 
@@ -18,6 +23,8 @@ To start your Phoenix server:
   * Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+To test the script, you can also launch `iex -S mix` and call the function `Localization.ImportCsv.do_script()`
+You can run tests with `mix test`
 
 ## With docker
 
@@ -31,8 +38,10 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
   * Create and migrate your database with `docker-compose exec elixir mix ecto.setup`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+To test the script, you can also launch `docker-compose exec elixir iex -S mix` and call the function `Localization.ImportCsv.do_script()`
+You can run tests with `docker-compose exec elixir mix test`
 
-# Coordinates calculs
+## Coordinates calculs
 
 I should have asked for coordinate before the week-end. Unfortunately, I was focused on other task, and when I spend a little time organizing the project, I didn't do enough research to figure out it would have been a problem.
 I could have use external databse, but the one I found are about country, not continents, which create a problem for the second part (and force the use of a databse).
@@ -46,3 +55,4 @@ Asia: [Liste de points extrêmes de l'Asie](https://fr.wikipedia.org/wiki/Liste_
 Europe: [Liste de points extrêmes de l'Europe](https://fr.wikipedia.org/wiki/Liste_de_points_extrêmes_de_l%27Europe) 
 Oceania [Liste de points extrêmes de l'Océanie](https://fr.wikipedia.org/wiki/Liste_de_points_extrêmes_de_l%27Océanie)
 America (south and north): [Liste de points extrêmes de l'Amérique](https://fr.wikipedia.org/wiki/Liste_de_points_extrêmes_de_l%27Amérique)
+
