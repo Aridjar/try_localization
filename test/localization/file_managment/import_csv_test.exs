@@ -1,6 +1,7 @@
 defmodule Localization.ImportCsvTest do
   use Localization.DataCase
   use Localization.GeographicalData
+
   alias Localization.ImportCsv
 
   @simplify_professions %{"1" => "category", "2" => "name", "3" => "name"}
