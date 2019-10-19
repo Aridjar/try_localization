@@ -1,6 +1,15 @@
 defmodule Localization.ImportCsv do
-  import Ecto.Query
-  alias Localization.Repo
+  def do_script() do
+    {job_offer, professions} = get_data()
+    simple_professions = simplify_professions_data(professions)
+  end
+
+  def get_data() do
+    job_offers = import_data_from_path("assets/csv/technical-test-jobs.csv")
+    professions = import_data_from_path("assets/csv/technical-test-professions.csv")
+
+    {job_offers, professions}
+  end
 
   def import_data_from_path(filepath) do
     filepath
@@ -10,10 +19,8 @@ defmodule Localization.ImportCsv do
     |> Enum.map(fn {_, value} -> value end)
   end
 
-  def get_data() do
-    job_offers = import_data_from_path("assets/csv/technical-test-jobs.csv")
-    professions = import_data_from_path("assets/csv/technical-test-professions.csv")
-
-    {job_offers, professions}
+  def simplify_professions_data(professions) do
+    professions
+    |> Map.new(fn %{"id" => id, "category_name" => category_name} -> {id, category_name} end)
   end
 end
