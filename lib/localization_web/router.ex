@@ -19,8 +19,9 @@ defmodule LocalizationWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", LocalizationWeb do
-  #   pipe_through :api
-  # end
+  scope "/v1", LocalizationWeb do
+    pipe_through :api
+
+    get "/get_job_offers", PageController, :get_job_offers
+  end
 end

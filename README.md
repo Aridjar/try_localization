@@ -26,6 +26,8 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 To test the script, you can also launch `iex -S mix` and call the function `Localization.ImportCsv.do_script()`
 You can run tests with `mix test`
 
+You can try the third element in the following adresse [`/v1/get_job_offers?latitude=48.8659387&longitude=2.34532&radius=10`](/v1/get_job_offers?latitude=48.8659387&longitude=2.34532&radius=10)
+
 ## With docker
 
   * Duplicate `.env.dist` to `.env` and update the values inside it
@@ -40,6 +42,8 @@ You can run tests with `mix test`
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 To test the script, you can also launch `docker-compose exec elixir iex -S mix` and call the function `Localization.ImportCsv.do_script()`
 You can run tests with `docker-compose exec elixir mix test`
+
+You can try the third element in the following adresse [`/v1/get_job_offers?latitude=48.8659387&longitude=2.34532&radius=10`](/v1/get_job_offers?latitude=48.8659387&longitude=2.34532&radius=10)
 
 ## Coordinates calculs
 

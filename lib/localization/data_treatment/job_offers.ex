@@ -110,4 +110,8 @@ defmodule Localization.JobOffers do
 
     %{total: updated_total}
   end
+
+  def get_offers_in_radius(job_offers, coordinates, radius) do
+    [Enum.at(job_offers, 0), Enum.at(job_offers, 1)]
+  end
 end
