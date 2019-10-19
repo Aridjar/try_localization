@@ -2,6 +2,9 @@ defmodule Localization.ImportCsvTest do
   use Localization.DataCase
   alias Localization.ImportCsv
 
+  @simplify_professions %{"1" => "category", "2" => "name", "3" => "name"}
+  @stash %{"total" => 0, "category" => 0, "name" => 0}
+
   test "import_data_from_path" do
     assert ImportCsv.import_data_from_path("test/support/csv/test.csv") == [
              %{"field1" => "1", "field2" => "2"},
@@ -30,6 +33,10 @@ defmodule Localization.ImportCsvTest do
              %{"id" => "1", "category_name" => "category"},
              %{"id" => "2", "category_name" => "name"},
              %{"id" => "3", "category_name" => "name"}
-           ]) == %{"1" => "category", "2" => "name", "3" => "name"}
+           ]) == @simplify_professions
+  end
+
+  test "create base stash" do
+    assert ImportCsv.create_base_stash(@simplify_professions) == @stash
   end
 end
