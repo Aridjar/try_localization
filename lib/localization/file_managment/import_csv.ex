@@ -1,10 +1,10 @@
 defmodule Localization.ImportCsv do
   def do_script() do
-    {job_offer, professions} = get_data()
+    {job_offers, professions} = get_data()
     simplify_professions = simplify_professions_data(professions)
     stash = create_base_stash(simplify_professions)
 
-    # sort_data(job_offer, simple_professions, stash)
+    sort_data_per_professions(job_offers, simplify_professions, stash)
   end
 
   def get_data() do
@@ -32,9 +32,24 @@ defmodule Localization.ImportCsv do
     |> Map.values()
     |> Enum.uniq()
     |> Map.new(fn name -> {name, 0} end)
-    |> Enum.into(%{"total" => 0})
+    |> Enum.into(%{"total" => 0, "undefined" => 0})
   end
 
-  # def sort_data([], _, stash), do: stash
-  # def sort_data[head | tail], job_offers, professions)
+  def sort_data_per_professions([], _, stash), do: stash
+
+  def sort_data_per_professions([%{"profession_id" => id} | tail], simplify_professions, stash) do
+    key =
+      with {:ok, val} <- Map.fetch(simplify_professions, id) do
+        val
+      else
+        _ -> "undefined"
+      end
+
+    new_stash =
+      stash
+      |> Map.update!(key, &(&1 + 1))
+      |> Map.update!("total", &(&1 + 1))
+
+    sort_data_per_professions(tail, simplify_professions, new_stash)
+  end
 end
