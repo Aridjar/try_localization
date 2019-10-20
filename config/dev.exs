@@ -1,5 +1,9 @@
 use Mix.Config
 
+config :localization,
+  job_offers_file: "assets/csv/technical-test-jobs.csv",
+  professions_file: "assets/csv/technical-test-professions.csv"
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

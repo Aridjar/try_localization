@@ -25,8 +25,13 @@ defmodule Localization.ImportCsv do
   end
 
   def get_data() do
-    job_offers = import_data_from_path("assets/csv/technical-test-jobs.csv")
-    professions = import_data_from_path("assets/csv/technical-test-professions.csv")
+    job_offers =
+      Application.get_env(:localization, :job_offers_file)
+      |> import_data_from_path()
+
+    professions =
+      Application.get_env(:localization, :professions_file)
+      |> import_data_from_path()
 
     {job_offers, professions}
   end

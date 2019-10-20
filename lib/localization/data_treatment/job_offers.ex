@@ -54,26 +54,12 @@ defmodule Localization.JobOffers do
     end
   end
 
-  def get_continent_from_job_offer(%{
-        "office_latitude" => office_latitude,
-        "office_longitude" => office_longitude
-      })
-      when bit_size(office_latitude) == 0 or bit_size(office_longitude) == 0 or
-             is_nil(office_latitude) or is_nil(office_longitude) do
-    :undefined
-  end
-
-  def get_continent_from_job_offer(%{
-        "office_latitude" => office_latitude,
-        "office_longitude" => office_longitude
-      }) do
-    latitude = String.to_float(office_latitude)
-    longitude = String.to_float(office_longitude)
-
-    with nil <-
-           Enum.find(@continent_data, fn {_, x} -> Topo.contains?(x, {latitude, longitude}) end) do
+  def get_continent_from_job_offer(job_offer) do
+    with {:ok, coordinates} <- get_job_coordinates(job_offer),
+         nil <- Enum.find(@continent_data, fn {_, x} -> Topo.contains?(x, coordinates) end) do
       :undefined
     else
+      {:error, _} -> :undefined
       result -> elem(result, 0)
     end
   end
@@ -111,7 +97,47 @@ defmodule Localization.JobOffers do
     %{total: updated_total}
   end
 
-  def get_offers_in_radius(job_offers, coordinates, radius) do
-    [Enum.at(job_offers, 0), Enum.at(job_offers, 1)]
+  def get_offers_in_radius(_, _, _, stash \\ [])
+  def get_offers_in_radius([], _, _, stash), do: stash
+
+  def get_offers_in_radius([head | tail], coordinates, radius, stash) do
+    new_stash =
+      with {:ok, offer_coordinates} <- get_job_coordinates(head),
+           {:ok, applicant_coordinates} <- get_coordinates(coordinates) do
+        Distance.GreatCircle.distance(offer_coordinates, applicant_coordinates)
+        |> create_new_stash_if_in_radius(head, radius, stash)
+      else
+        _ -> stash
+      end
+
+    get_offers_in_radius(tail, coordinates, radius, new_stash)
+  end
+
+  def create_new_stash_if_in_radius(distance, job_offer, radius, stash) do
+    if distance < radius * 1000 do
+      new_job_offer =
+        %{"distance" => distance}
+        |> Enum.into(job_offer)
+
+      stash ++ [new_job_offer]
+    else
+      stash
+    end
+  end
+
+  def get_job_coordinates(%{"office_latitude" => latitude, "office_longitude" => longitude})
+      when bit_size(latitude) == 0 or bit_size(longitude) == 0 or
+             is_nil(latitude) or is_nil(longitude) do
+    {:error, :undefined}
+  end
+
+  def get_job_coordinates(%{"office_latitude" => latitude, "office_longitude" => longitude}) do
+    get_coordinates({latitude, longitude})
+  end
+
+  def get_coordinates({latitude, longitude}) do
+    new_latitude = String.to_float(latitude)
+    new_longitude = String.to_float(longitude)
+    {:ok, {new_latitude, new_longitude}}
   end
 end

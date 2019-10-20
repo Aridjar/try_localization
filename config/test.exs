@@ -1,5 +1,9 @@
 use Mix.Config
 
+config :localization,
+  job_offers_file: "test/support/csv/technical-test-jobs.csv",
+  professions_file: "test/support/csv/technical-test-professions.csv"
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :localization, LocalizationWeb.Endpoint,
